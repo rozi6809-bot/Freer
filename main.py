@@ -2,6 +2,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKe
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackQueryHandler, filters, ContextTypes
 from config import TOKEN, ADMIN_ID, DANA_ADMIN, MIN_WD, KOMISI_REFERRAL, KOMISI_PERAPPROVE, BOT_REKOMENDASI, CHANNEL_ID
 from database import *
+from datetime import datetime
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -47,20 +48,19 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     user_id = user.id
 
-    if not await is_member(context.bot, user_id):
-        await send_join_prompt(update.message)
-        return
-
     is_new_user = get_user(user_id) is None
 
     referred_by = None
+
     if is_new_user and context.args:
         ref_code = context.args[0]
         referrer = get_referral_by_code(ref_code)
+
         if referrer and referrer[0] != user_id:
             referred_by = referrer[0]
-            # Kasih komisi ke referrer hanya untuk user baru
+
             update_saldo(referrer[0], KOMISI_REFERRAL)
+
             try:
                 await context.bot.send_message(
                     chat_id=referrer[0],
@@ -70,21 +70,47 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
             except:
                 pass
 
-    ref_code = f"REF{user_id}"
-    create_user(user_id, user.username or "", user.full_name or "", ref_code, referred_by)
+    if is_new_user:
+        ref_code = f"REF{user_id}"
+        create_user(
+            user_id,
+            user.username or "",
+            user.full_name or "",
+            ref_code,
+            referred_by
+        )
+
     db_user = get_user(user_id)
     saldo = db_user[3] if db_user else 0
     total_users = get_total_users()
+    now = datetime.now()
+    
+    text = (   
+             
+    f"🌙 Selamat Malam {user.first_name} 👋\n\n"
 
-text = (
-    f"👋 Halo, *{user.full_name}*!\n\n"
-    f"🤖 *FREELANCE APK BOT*\n"
-    f"━━━━━━━━━━━━━━━━━━\n"
-    f"👤 ID: `{user_id}`\n"
-    f"💰 Saldo: *Rp {saldo:,}*\n"
-    f"👥 Total Member: {78626 + total_users:,}\n"
-    f"━━━━━━━━━━━━━━━━━━\n"
-    f"Pilih menu di bawah 👇"
+    f"🤖 FREELANCE APK BOT\n\n"
+
+    f"⏰ Waktu Server:\n"
+    f"📅 {now.strftime('%d-%m-%Y')}\n"
+    f"🕐 {now.strftime('%H:%M:%S')} WIB\n\n"
+
+    f"━━━━━━━━━━━━━━━━━━━\n"
+    f"⚙️ SYSTEM INFORMATION\n"
+    f"👥 Total Users: {78626 + total_users:,}\n"
+    f"━━━━━━━━━━━━━━━━━━━\n\n"
+
+    f"👤 PROFIL ANDA\n"
+    f"• Nama: {user.full_name}\n"
+    f"• ID: {user_id}\n"
+    f"• Username: @{user.username}\n"
+    f"• Saldo: Rp {saldo:,}\n\n"
+
+    f"📊 STATISTIK BOT\n"
+    f"• Total User: {78626 + total_users:,}\n"
+    f"• Tugas Selesai: {get_total_tasks_done()}\n\n"
+
+    f"🔥 Gabung channel kami untuk info terbaru!"
 )
     await update.message.reply_text(text, parse_mode="Markdown", reply_markup=main_keyboard())
 
