@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 # =========================
 WD_STEP = {}
 
-# ===== KEYBOARD MENU BAWAH =====
+# ===== KEYBOARD MENU ATAS =====
 def main_keyboard():
     keyboard = [
         [KeyboardButton("📋 Tugas"), KeyboardButton("💰 Saldo")],
