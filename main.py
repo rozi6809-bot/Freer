@@ -6,15 +6,10 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-keyboard = [
-    [InlineKeyboardButton("📢 JOIN CHANNEL", url="https://t.me/Freelanceapkbot_Info")]
-]
-reply_markup = InlineKeyboardMarkup(keyboard)
-
-await update.message.reply_text(
-    "⚠️ Wajib join channel dulu sebelum lanjut!",
-    reply_markup=reply_markup
-)
+# =========================
+# GLOBAL STATE
+# =========================
+WD_STEP = {}
 
 # ===== KEYBOARD MENU BAWAH =====
 def main_keyboard():
@@ -101,7 +96,27 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await is_member(context.bot, user_id):
         await send_join_prompt(update.message)
         return
+        
+# =========================
+# WD MANUAL STEP 1
+# =========================
+    if user_id in WD_STEP and WD_STEP[user_id] == "manual_amount":
+        try:
+            jumlah = int(text)
+        except:
+            await update.message.reply_text("❌ Masukkan angka saja!")
+            return
 
+        WD_STEP[user_id] = {
+            "step": "input_nomor",
+            "jumlah": jumlah
+        }
+
+        await update.message.reply_text(
+            "📱 Sekarang masukkan nomor DANA / Bank tujuan:"
+        )
+        return
+        
     # Reset semua state jika user pencet tombol menu
     menu_buttons = ["📋 Tugas", "💰 Saldo", "💳 Deposit", "💸 Tarik Saldo", "👥 Referral", "📜 Riwayat", "🤖 Bot Lainnya", "ℹ️ Info"]
     if text in menu_buttons:
@@ -116,6 +131,25 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Cek mode input (hanya jika bukan tombol menu)
     else:
+        # =========================
+        # WD MANUAL STEP 2
+        # =========================
+        if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
+            if WD_STEP[user_id]["step"] == "input_nomor":
+
+                jumlah = WD_STEP[user_id]["jumlah"]
+                nomor = text.strip()
+
+                await update.message.reply_text(
+                    f"✅ Data WD diterima\n\n"
+                    f"💰 Nominal: Rp {jumlah:,}\n"
+                    f"📱 Tujuan: {nomor}\n\n"
+                    f"⏳ Menunggu proses admin."
+                )
+
+                del WD_STEP[user_id]
+                return
+                
         if context.user_data.get("input_wd_nomor"):
             await proses_wd_nomor(update, context)
             return
@@ -438,11 +472,23 @@ async def photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
-    data = query.data
-    parts = data.split("_")
 
-    if data.startswith("ambil_"):
+    data = query.data
+
+    # WD MANUAL
+    if data == "wd_manual":
+        user_id = query.from_user.id
+        WD_STEP[user_id] = "manual_amount"
+
+        await query.message.reply_text(
+            "💸 Masukkan nominal WD:"
+        )
+        return
+
+    elif data.startswith("ambil_"):
+        parts = data.split("_")
         task_id = parts[1]
+
         user_id = query.from_user.id
         task = get_task(task_id)
         if not task:
@@ -600,16 +646,22 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="Markdown"
         )
 
-    elif data == "cek_member":
-        user_id = query.from_user.id
-        if await is_member(context.bot, user_id):
-            await query.edit_message_text(
-                "✅ *Verifikasi berhasil!*\n\nSekarang kamu bisa menggunakan bot.\nKetik /start untuk memulai!",
-                parse_mode="Markdown"
-            )
-        else:
-            await query.answer("❌ Kamu belum join channel! Silakan join dulu.", show_alert=True)
+    # CEK MEMBER SETELAH KLIK TOMBOL
+if data == "cek_member":
+    user_id = query.from_user.id
 
+    if await is_member(context.bot, user_id):
+        await query.message.reply_text(
+            "✅ Verifikasi berhasil!\nSilakan ketik /start lagi."
+        )
+    else:
+        await query.answer(
+            "❌ Kamu belum join channel!",
+            show_alert=True
+        )
+
+    return
+    
 # ===== ADMIN COMMANDS =====
 async def admin_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID:
