@@ -76,16 +76,16 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     saldo = db_user[3] if db_user else 0
     total_users = get_total_users()
 
-    text = (
-        f"👋 Halo, *{user.full_name}*!\n\n"
-        f"🤖 *FREELANCE APK BOT*\n"
-        f"━━━━━━━━━━━━━━━━━━\n"
-        f"👤 ID: `{user_id}`\n"
-        f"💰 Saldo: *Rp {saldo:,}*\n"
-        f"👥 Total Member: {total_users}\n"
-        f"━━━━━━━━━━━━━━━━━━\n"
-        f"Pilih menu di bawah 👇"
-    )
+text = (
+    f"👋 Halo, *{user.full_name}*!\n\n"
+    f"🤖 *FREELANCE APK BOT*\n"
+    f"━━━━━━━━━━━━━━━━━━\n"
+    f"👤 ID: `{user_id}`\n"
+    f"💰 Saldo: *Rp {saldo:,}*\n"
+    f"👥 Total Member: {78626 + total_users:,}\n"
+    f"━━━━━━━━━━━━━━━━━━\n"
+    f"Pilih menu di bawah 👇"
+)
     await update.message.reply_text(text, parse_mode="Markdown", reply_markup=main_keyboard())
 
 # ===== HANDLER TEKS =====
