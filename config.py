@@ -24,4 +24,4 @@ BOT_REKOMENDASI = [
 # =========================
 # MONGODB
 # =========================
-MONGO_URL = "mongodb+srv://USERNAME_BARU:king@cluster0.rwbqxmx.mongodb.net/bot_db?retryWrites=true&w=majority"
+mongodb+srv://rozi6809_db_user:<king>@cluster0.rwbqxmx.mongodb.net/?appName=Cluster0
