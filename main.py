@@ -6,6 +6,16 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+keyboard = [
+    [InlineKeyboardButton("📢 JOIN CHANNEL", url="https://t.me/Freelanceapkbot_Info")]
+]
+reply_markup = InlineKeyboardMarkup(keyboard)
+
+await update.message.reply_text(
+    "⚠️ Wajib join channel dulu sebelum lanjut!",
+    reply_markup=reply_markup
+)
+
 # ===== KEYBOARD MENU BAWAH =====
 def main_keyboard():
     keyboard = [
