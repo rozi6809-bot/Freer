@@ -131,50 +131,55 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Cek mode input (hanya jika bukan tombol menu)
     else:
-        # =========================
-        # WD MANUAL STEP 2
-        # =========================
-        if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
-            if WD_STEP[user_id]["step"] == "input_nomor":
 
-                jumlah = WD_STEP[user_id]["jumlah"]
-                nomor = text.strip()
+    # =========================
+    # WD MANUAL STEP 2
+    # =========================
+    if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
+        if WD_STEP[user_id]["step"] == "input_nomor":
 
-                await update.message.reply_text(
-                    f"✅ Data WD diterima\n\n"
-                    f"💰 Nominal: Rp {jumlah:,}\n"
-                    f"📱 Tujuan: {nomor}\n\n"
-                    f"⏳ Menunggu proses admin."
-                )
+            jumlah = WD_STEP[user_id]["jumlah"]
 
-                del WD_STEP[user_id]
-                return
-                
-        if context.user_data.get("input_wd_nomor"):
+            context.user_data["wd_jumlah"] = jumlah
+
+            del WD_STEP[user_id]
+
             await proses_wd_nomor(update, context)
             return
-        if context.user_data.get("input_wd"):
-            await proses_wd(update, context)
-            return
-        if context.user_data.get("input_deposit_jumlah"):
-            try:
-                jumlah = int(text.replace(".", "").replace(",", ""))
-                context.user_data["deposit_jumlah"] = jumlah
-                context.user_data["input_deposit_jumlah"] = False
-                context.user_data["input_deposit_bukti"] = True
-                await update.message.reply_text(
-                    f"💳 Transfer Rp {jumlah:,} ke DANA:\n`{DANA_ADMIN}`\n\nLalu kirim *screenshot bukti transfer*!",
-                    parse_mode="Markdown"
-                )
-            except:
-                await update.message.reply_text("❌ Format salah! Ketik angka saja.\nContoh: `50000`", parse_mode="Markdown")
-            return
-        if context.user_data.get("broadcast_mode"):
-            await do_broadcast(update, context)
-            return
-        if context.user_data.get("addtask_mode"):
-            await do_addtask(update, context)
-            return
+
+    if context.user_data.get("input_wd_nomor"):
+        await proses_wd_nomor(update, context)
+        return
+
+    if context.user_data.get("input_wd"):
+        await proses_wd(update, context)
+        return
+
+    if context.user_data.get("input_deposit_jumlah"):
+        try:
+            jumlah = int(text.replace(".", "").replace(",", ""))
+            context.user_data["deposit_jumlah"] = jumlah
+            context.user_data["input_deposit_jumlah"] = False
+            context.user_data["input_deposit_bukti"] = True
+
+            await update.message.reply_text(
+                f"💳 Transfer Rp {jumlah:,} ke DANA:\n`{DANA_ADMIN}`\n\nLalu kirim *screenshot bukti transfer*!",
+                parse_mode="Markdown"
+            )
+        except:
+            await update.message.reply_text(
+                "❌ Format salah! Ketik angka saja.\nContoh: `50000`",
+                parse_mode="Markdown"
+            )
+        return
+
+    if context.user_data.get("broadcast_mode"):
+        await do_broadcast(update, context)
+        return
+
+    if context.user_data.get("addtask_mode"):
+        await do_addtask(update, context)
+        return
 
     # Menu utama
     if text == "📋 Tugas":
@@ -629,20 +634,6 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📊 Fee (1.5%): Rp {fee:,}\n"
             f"📤 Kamu terima: *Rp {diterima:,}*\n\n"
             f"Ketik *nomor DANA* kamu:",
-            parse_mode="Markdown"
-        )
-
-    elif data == "wd_manual":
-        user_id = query.from_user.id
-        db_user = get_user(user_id)
-        saldo = db_user[3] if db_user else 0
-        context.user_data["input_wd"] = True
-        await query.edit_message_text(
-            f"💸 *TARIK SALDO — MANUAL*\n━━━━━━━━━━━━━━━━━━\n"
-            f"💰 Saldo: *Rp {saldo:,}*\n"
-            f"📊 Fee: 1.5% dari jumlah WD\n\n"
-            f"Ketik dengan format:\n`jumlah|nomorDANA`\n"
-            f"Contoh: `50000|081234567890`",
             parse_mode="Markdown"
         )
 
