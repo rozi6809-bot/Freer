@@ -5,18 +5,23 @@ TOKEN = "8584953058:AAHZWFAzGmAnLju67UpLwnq3mMUH5EaBjmQ"
 ADMIN_ID = 8177594121
 DANA_ADMIN = "085864539634"
 
-# ===========================
-# SETTING
-# ===========================
-KOMISI_REFERRAL = 3000
+# =========================
+# SETTING BOT
+# =========================
+MIN_WD = 10000
+KOMISI_REFERRAL = 1500
 KOMISI_PERAPPROVE = 1000
-MIN_WD = 2000
-DB_NAME = "database.db"
 
-# ===========================
-# BOT REKOMENDASI
-# Ganti sesuai bot lo mau rekomendasiin apa
-# ===========================
+# =========================
+# BOT INFO
+# =========================
+CHANNEL_ID = "@Freelanceapkbot_Info"
+
 BOT_REKOMENDASI = [
     {"nama": "Bot Top Up Game", "link": "https://t.me/XyroStoreBot"}
 ]
+
+# =========================
+# MONGODB
+# =========================
+MONGO_URL = "mongodb+srv://rozi6809_db_user:sleep@cluster0.rwbqxmx.mongodb.net/bot_db?appName=Cluster0"
