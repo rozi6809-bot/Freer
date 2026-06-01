@@ -156,7 +156,7 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["ambil_tugas"] = None
 
     # Cek mode input (hanya jika bukan tombol menu)
-    else:
+else:
 
     # =========================
     # WD MANUAL STEP 2
@@ -182,49 +182,8 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if context.user_data.get("input_deposit_jumlah"):
-        try:
-            jumlah = int(text.replace(".", "").replace(",", ""))
-            context.user_data["deposit_jumlah"] = jumlah
-            context.user_data["input_deposit_jumlah"] = False
-            context.user_data["input_deposit_bukti"] = True
-
-            await update.message.reply_text(
-                f"💳 Transfer Rp {jumlah:,} ke DANA:\n`{DANA_ADMIN}`\n\nLalu kirim *screenshot bukti transfer*!",
-                parse_mode="Markdown"
-            )
-        except:
-            await update.message.reply_text(
-                "❌ Format salah! Ketik angka saja.\nContoh: `50000`",
-                parse_mode="Markdown"
-            )
-        return
-
-    if context.user_data.get("broadcast_mode"):
-        await do_broadcast(update, context)
-        return
-
-    if context.user_data.get("addtask_mode"):
-        await do_addtask(update, context)
-        return
-
-    # Menu utama
-    if text == "📋 Tugas":
-        await show_tugas(update, context)
-    elif text == "💰 Saldo":
-        await show_saldo(update, context)
-    elif text == "💳 Deposit":
-        await show_deposit(update, context)
-    elif text == "💸 Tarik Saldo":
-        await show_wd(update, context)
-    elif text == "👥 Referral":
-        await show_referral(update, context)
-    elif text == "📜 Riwayat":
-        await show_riwayat_menu(update, context)
-    elif text == "🤖 Bot Lainnya":
-        await show_bot_lainnya(update, context)
-    elif text == "ℹ️ Info":
-        await show_info(update, context)
-
+        ...
+        
 # ===== TUGAS =====
 async def show_tugas(update: Update, context: ContextTypes.DEFAULT_TYPE):
     tasks = get_active_tasks()
