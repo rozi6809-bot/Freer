@@ -108,7 +108,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     f"📊 STATISTIK BOT\n"
     f"• Total User: {78626 + total_users:,}\n"
-    f"• Tugas Selesai: {get_total_tasks_done()}\n\n"
+    f"• Tugas Selesai: {67149 + get_total_tasks_done()}\n\n"
 
     f"🔥 Gabung channel kami untuk info terbaru!"
 )
@@ -605,7 +605,7 @@ async def callback_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await query.edit_message_text("📋 Belum ada riwayat tugas.")
             return
         text = "📋 *RIWAYAT TUGAS*\n━━━━━━━━━━━━━━━━━━\n\n"
-        for t in tasks[:10]:
+        for t in tasks[:10]: 
             status_icon = "✅" if t[4] == "approved" else ("❌" if t[4] == "rejected" else "⏳")
             text += f"{status_icon} {t[2]} — Rp {t[3]:,}\n"
         await query.edit_message_text(text, parse_mode="Markdown")
