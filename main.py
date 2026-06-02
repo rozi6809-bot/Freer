@@ -126,7 +126,7 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # =========================
     # WD MANUAL STEP 1
     # =========================
-    if user_id in WD_STEP and WD_STEP[user_id] == "manual_amount":
+    if user_id in WD_STEP and WD_STEP[user_id].get("step") == "manual_amount":
         try:
             jumlah = int(text)
         except:
@@ -138,9 +138,7 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "jumlah": jumlah
         }
 
-        await update.message.reply_text(
-            "📱 Sekarang masukkan nomor DANA / Bank tujuan:"
-        )
+        await update.message.reply_text("📱 Sekarang masukkan nomor DANA / Bank tujuan:")
         return
 
     # =========================
@@ -160,21 +158,22 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["ambil_tugas"] = None
         return
 
-# =========================
-# WD MANUAL STEP 2
-# =========================
-if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
-    if WD_STEP[user_id]["step"] == "input_nomor":
+    # =========================
+    # WD MANUAL STEP 2  👈 INI HARUS DI DALAM FUNCTION
+    # =========================
+    if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
+        if WD_STEP[user_id]["step"] == "input_nomor":
 
-        jumlah = WD_STEP[user_id]["jumlah"]
+            jumlah = WD_STEP[user_id]["jumlah"]
 
-        context.user_data["wd_jumlah"] = jumlah
+            context.user_data["wd_jumlah"] = jumlah
 
-        del WD_STEP[user_id]
+            del WD_STEP[user_id]
 
-        await proses_wd_nomor(update, context)
-        return
+            await proses_wd_nomor(update, context)
+            return
 
+        
 # =========================
 # INPUT LAIN
 # =========================
