@@ -143,46 +143,48 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
         
-    # Reset semua state jika user pencet tombol menu
-    menu_buttons = ["📋 Tugas", "💰 Saldo", "💳 Deposit", "💸 Tarik Saldo", "👥 Referral", "📜 Riwayat", "🤖 Bot Lainnya", "ℹ️ Info"]
-    if text in menu_buttons:
-        context.user_data["input_wd"] = False
-        context.user_data["input_wd_nomor"] = False
-        context.user_data["wd_jumlah"] = None
-        context.user_data["input_deposit_jumlah"] = False
-        context.user_data["input_deposit_bukti"] = False
-        context.user_data["broadcast_mode"] = False
-        context.user_data["addtask_mode"] = False
-        context.user_data["ambil_tugas"] = None
+# Reset semua state jika user pencet tombol menu
+menu_buttons = ["📋 Tugas", "💰 Saldo", "💳 Deposit", "💸 Tarik Saldo", "👥 Referral", "📜 Riwayat", "🤖 Bot Lainnya", "ℹ️ Info"]
 
-    # Cek mode input (hanya jika bukan tombol menu)
-else:
+if text in menu_buttons:
+    context.user_data["input_wd"] = False
+    context.user_data["input_wd_nomor"] = False
+    context.user_data["wd_jumlah"] = None
+    context.user_data["input_deposit_jumlah"] = False
+    context.user_data["input_deposit_bukti"] = False
+    context.user_data["broadcast_mode"] = False
+    context.user_data["addtask_mode"] = False
+    context.user_data["ambil_tugas"] = None
+    return
 
-    # =========================
-    # WD MANUAL STEP 2
-    # =========================
-    if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
-        if WD_STEP[user_id]["step"] == "input_nomor":
+# =========================
+# WD MANUAL STEP 2
+# =========================
+if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
+    if WD_STEP[user_id]["step"] == "input_nomor":
 
-            jumlah = WD_STEP[user_id]["jumlah"]
+        jumlah = WD_STEP[user_id]["jumlah"]
 
-            context.user_data["wd_jumlah"] = jumlah
+        context.user_data["wd_jumlah"] = jumlah
 
-            del WD_STEP[user_id]
+        del WD_STEP[user_id]
 
-            await proses_wd_nomor(update, context)
-            return
-
-    if context.user_data.get("input_wd_nomor"):
         await proses_wd_nomor(update, context)
         return
 
-    if context.user_data.get("input_wd"):
-        await proses_wd(update, context)
-        return
+# =========================
+# INPUT LAIN
+# =========================
+if context.user_data.get("input_deposit_jumlah"):
+    ...
 
-    if context.user_data.get("input_deposit_jumlah"):
-        ...
+if context.user_data.get("broadcast_mode"):
+    await do_broadcast(update, context)
+    return
+
+if context.user_data.get("addtask_mode"):
+    await do_addtask(update, context)
+    return
         
 # ===== TUGAS =====
 async def show_tugas(update: Update, context: ContextTypes.DEFAULT_TYPE):
