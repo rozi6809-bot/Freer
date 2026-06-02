@@ -24,4 +24,4 @@ BOT_REKOMENDASI = [
 # =========================
 # MONGODB
 # =========================
-MONGO_URL = "mongodb+srv://username:password@cluster0.mongodb.net/bot_db"
+MONGO_URL = "mongodb+srv://rozi6809_db_user:Sleep1234@cluster0.rwbqxmx.mongodb.net/?appName=Cluster0"
