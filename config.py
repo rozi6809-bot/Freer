@@ -1,14 +1,7 @@
-import os
+# config.py
 
-TOKEN = os.environ.get("TOKEN", "")
-ADMIN_ID = int(os.environ.get("ADMIN_ID", 0))
-DANA_ADMIN = os.environ.get("DANA_ADMIN", "085864539634")
-MONGO_URL = os.environ.get("MONGO_URL", "")
+TOKEN = "8584953058:AAE0K5o_0NTiPOPnTPQg7kFteUVB0AuEVUc"
 
-MIN_WD = 10000
-KOMISI_REFERRAL = 1500
-KOMISI_PERAPPROVE = 1000
-CHANNEL_ID = "@Freelanceapkbot_Info"
-BOT_REKOMENDASI = [
-    {"nama": "Bot Top Up Game", "link": "https://t.me/XyroStoreBot"}
-]
+# MongoDB Atlas
+MONGO_URI = "mongodb+srv://rozi6809_db_user:<db_password>@cluster0.rwbqxmx.mongodb.net/?appName=Cluster0"
+CHANNEL_USERNAME = "@freelanceapkbot_info"
