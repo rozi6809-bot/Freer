@@ -122,10 +122,10 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not await is_member(context.bot, user_id):
         await send_join_prompt(update.message)
         return
-        
-# =========================
-# WD MANUAL STEP 1
-# =========================
+
+    # =========================
+    # WD MANUAL STEP 1
+    # =========================
     if user_id in WD_STEP and WD_STEP[user_id] == "manual_amount":
         try:
             jumlah = int(text)
@@ -142,20 +142,23 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "📱 Sekarang masukkan nomor DANA / Bank tujuan:"
         )
         return
-        
-# Reset semua state jika user pencet tombol menu
-menu_buttons = ["📋 Tugas", "💰 Saldo", "💳 Deposit", "💸 Tarik Saldo", "👥 Referral", "📜 Riwayat", "🤖 Bot Lainnya", "ℹ️ Info"]
 
-if text in menu_buttons:
-    context.user_data["input_wd"] = False
-    context.user_data["input_wd_nomor"] = False
-    context.user_data["wd_jumlah"] = None
-    context.user_data["input_deposit_jumlah"] = False
-    context.user_data["input_deposit_bukti"] = False
-    context.user_data["broadcast_mode"] = False
-    context.user_data["addtask_mode"] = False
-    context.user_data["ambil_tugas"] = None
-    return
+    # =========================
+    # RESET MENU
+    # =========================
+    menu_buttons = ["📋 Tugas", "💰 Saldo", "💳 Deposit", "💸 Tarik Saldo",
+                    "👥 Referral", "📜 Riwayat", "🤖 Bot Lainnya", "ℹ️ Info"]
+
+    if text in menu_buttons:
+        context.user_data["input_wd"] = False
+        context.user_data["input_wd_nomor"] = False
+        context.user_data["wd_jumlah"] = None
+        context.user_data["input_deposit_jumlah"] = False
+        context.user_data["input_deposit_bukti"] = False
+        context.user_data["broadcast_mode"] = False
+        context.user_data["addtask_mode"] = False
+        context.user_data["ambil_tugas"] = None
+        return
 
 # =========================
 # WD MANUAL STEP 2
