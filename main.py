@@ -159,7 +159,7 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     # =========================
-    # WD MANUAL STEP 2  👈 INI HARUS DI DALAM FUNCTION
+    # WD MANUAL STEP 2
     # =========================
     if user_id in WD_STEP and isinstance(WD_STEP[user_id], dict):
         if WD_STEP[user_id]["step"] == "input_nomor":
@@ -173,20 +173,21 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await proses_wd_nomor(update, context)
             return
 
+    # =========================
+    # INPUT LAIN
+    # =========================
+    if context.user_data.get("input_deposit_jumlah"):
+        ...
+
+    if context.user_data.get("broadcast_mode"):
+        await do_broadcast(update, context)
+        return
+
+    if context.user_data.get("addtask_mode"):
+        await do_addtask(update, context)
+        return
         
-# =========================
-# INPUT LAIN
-# =========================
-if context.user_data.get("input_deposit_jumlah"):
-    ...
 
-if context.user_data.get("broadcast_mode"):
-    await do_broadcast(update, context)
-    return
-
-if context.user_data.get("addtask_mode"):
-    await do_addtask(update, context)
-    return
         
 # ===== TUGAS =====
 async def show_tugas(update: Update, context: ContextTypes.DEFAULT_TYPE):
