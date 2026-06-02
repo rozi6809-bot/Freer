@@ -1,7 +1,7 @@
 # ===========================
 # WAJIB DIISI
 # ===========================
-TOKEN = "8584953058:AAHZWFAzGmAnLju67UpLwnq3mMUH5EaBjmQ"
+TOKEN = "8584953058:AAE10uoHe7JdhsscHoZV9nYKwYbZ0bQ7QoU"
 ADMIN_ID = 8177594121
 DANA_ADMIN = "085864539634"
 
