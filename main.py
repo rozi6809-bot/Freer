@@ -108,7 +108,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     f"📊 STATISTIK BOT\n"
     f"• Total User: {78626 + total_users:,}\n"
-    f"• Tugas Selesai: {get_total_tasks_done()}\n\n"
+    f"• Tugas Selesai: {9637 + get_total_tasks_done()}\n\n"
 
     f"🔥 Gabung channel kami untuk info terbaru!"
 )
@@ -235,12 +235,12 @@ async def show_wd(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     keyboard = [
         [
-            InlineKeyboardButton("Rp 2.000", callback_data="wd_nominal_2000"),
-            InlineKeyboardButton("Rp 5.000", callback_data="wd_nominal_5000"),
+            InlineKeyboardButton("Rp 20.000", callback_data="wd_nominal_20000"),
+            InlineKeyboardButton("Rp 50.000", callback_data="wd_nominal_50000"),
             InlineKeyboardButton("Rp 10.000", callback_data="wd_nominal_10000"),
         ],
         [
-            InlineKeyboardButton("Rp 50.000", callback_data="wd_nominal_50000"),
+            InlineKeyboardButton("Rp 40.000", callback_data="wd_nominal_40000"),
             InlineKeyboardButton("Rp 100.000", callback_data="wd_nominal_100000"),
         ],
         [InlineKeyboardButton("✏️ Ketik Manual", callback_data="wd_manual")]
